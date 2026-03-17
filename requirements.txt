@@ -1,0 +1,43 @@
+# Core
+torch>=2.2.0
+torchvision>=0.17.0
+torchaudio>=2.2.0
+
+# Vision / pretrained models
+timm>=0.9.12
+
+# NLP / LLMs
+transformers>=4.40.0
+datasets>=2.19.0
+tokenizers>=0.19.0
+seqeval>=1.2.2
+trl>=0.8.6
+peft>=0.10.0
+
+# LoRA / efficient fine-tuning (A11)
+# Install unsloth separately — version is environment-specific.
+# Follow: https://github.com/unslothai/unsloth#installation
+# unsloth
+
+# Object detection (A05)
+ultralytics>=8.2.0
+
+# Contrastive learning / embeddings (A04)
+umap-learn>=0.5.6
+
+# Scientific computing
+numpy>=1.26.0
+scipy>=1.13.0
+scikit-learn>=1.4.0
+
+# Visualisation
+matplotlib>=3.8.0
+seaborn>=0.13.0
+Pillow>=10.3.0
+
+# Experiment tracking (optional but recommended)
+wandb>=0.17.0
+
+# Utilities
+tqdm>=4.66.0
+requests>=2.31.0
