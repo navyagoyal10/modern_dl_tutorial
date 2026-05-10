@@ -21,7 +21,6 @@ pytorch-assignments/
 ├── README.md               ← you are here
 ├── requirements.txt        ← all dependencies
 ├── RESOURCES.md            ← annotated reading list for all assignments
-├── AGENT_PROMPT.md         ← prompt for generating starter code
 │
 ├── A01/  PyTorch training loop from scratch (MNIST)
 ├── A02/  Transfer learning and ResNet fine-tuning (EuroSAT)
