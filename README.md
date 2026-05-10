@@ -33,7 +33,9 @@ pytorch-assignments/
 ├── A09/  Transformers without normalisation — DyT (EuroSAT)
 ├── A10/  BERT — classification and NER (SST-2, CoNLL-2003)
 ├── A11/  LoRA and parameter-efficient fine-tuning (Alpaca)
-└── A12/  Capstone — multimodal classification pipeline (EuroSAT)
+├── A12/  Capstone — multimodal classification pipeline (EuroSAT)
+├── A13/  RL for LLMs — GRPO + Unsloth Sudoku solver
+└── A14/  Agentic AI — tool-using agents with Gemini API
 ```
 
 Each assignment folder contains a `README.md` with full theory, mathematical derivations, reading material, task description, deliverables, and skeleton starter code.
@@ -56,6 +58,8 @@ Each assignment folder contains a `README.md` with full theory, mathematical der
 | A10 | BERT | MLM, bidirectional attention, NER | SST-2, CoNLL-2003 | ~6 GB |
 | A11 | LoRA | Low-rank adaptation, QLoRA, Unsloth | Alpaca | ~16 GB |
 | A12 | Multimodal capstone | Late fusion, ViT + BERT, JEPA context | EuroSAT | ~10 GB |
+| A13 | RL for LLMs — Sudoku | GRPO, RLVR, reward shaping, Unsloth | Generated | ~8 GB |
+| A14 | Agentic AI with Gemini | Tool use, ReAct, multi-agent orchestration | — | CPU |
 
 ---
 
