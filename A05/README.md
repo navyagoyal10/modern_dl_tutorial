@@ -85,13 +85,13 @@ graph TD
 
 | Parameter | Shape | Role |
 |---|---|---|
-| $W_{xh}$ | $(H,\, \text{embed\_dim})$ | input embedding → hidden pre-activation |
-| $W_{hh}$ | $(H,\, H)$ | previous hidden state → hidden pre-activation |
+| $W_{xh}$ | $(H \times E)$ | input embedding → hidden pre-activation |
+| $W_{hh}$ | $(H \times H)$ | previous hidden state → hidden pre-activation |
 | $b_h$ | $(H,)$ | hidden bias |
-| $W_{hy}$ | $(V,\, H)$ | hidden state → vocabulary logits |
+| $W_{hy}$ | $(V \times H)$ | hidden state → vocabulary logits |
 | $b_y$ | $(V,)$ | output bias |
 
-$V$ is vocabulary size (~65 for tinyshakespeare), $H$ is hidden dimension, embed\_dim is the character embedding size.
+$V$ is vocabulary size (~65 for tinyshakespeare), $H$ is hidden dimension, $E$ is embedding dimension (`embed_dim`).
 
 ### Xavier initialisation and the symmetry problem
 
@@ -273,7 +273,7 @@ $$h_t = o_t \odot \tanh(c_t)$$
 
 $$[f_{\text{pre}},\; i_{\text{pre}},\; \tilde{c}_{\text{pre}},\; o_{\text{pre}}] = x_t W_x^\top + h_{t-1} W_h^\top + b$$
 
-where $W_x \in \mathbb{R}^{4H \times \text{embed\_dim}}$ and $W_h \in \mathbb{R}^{4H \times H}$ stack all four gate matrices. Then `.chunk(4, dim=-1)` splits the result. One matrix multiply instead of four — this is how `nn.LSTM` does it internally, and how your implementation should too.
+where $W_x \in \mathbb{R}^{4H \times E}$ and $W_h \in \mathbb{R}^{4H \times H}$ stack all four gate matrices (with $E$ = `embed_dim`). Then `.chunk(4, dim=-1)` splits the result. One matrix multiply instead of four — this is how `nn.LSTM` does it internally, and how your implementation should too.
 
 **Forget gate bias initialisation:** initialise $b_f$ (the forget gate slice of $b$) to 1.0, not 0. This means $f_t \approx \sigma(1) \approx 0.73$ at the start of training — the network defaults to preserving most of its memory. Training then adjusts this. Starting at 0.5 (from $b_f = 0$) is a slower and less stable starting point.
 
@@ -307,13 +307,13 @@ Try temperatures 0.5, 0.8, and 1.2 and compare the output. This is one of the an
 ## Reading Material
 
 **Primary — read before starting**
-- Karpathy, "The Unreasonable Effectiveness of Recurrent Neural Networks" (2015): http://karpathy.github.io/2015/05/21/rnn-effectiveness/ 
+- Karpathy, "The Unreasonable Effectiveness of Recurrent Neural Networks" (2015): http://karpathy.github.io/2015/05/21/rnn-effectiveness/
 - Stanford CS-230 RNN Cheatsheet: https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-recurrent-neural-networks/
 
 **Videos — watch in this order**
 
-1. StatQuest: "RNNs Clearly Explained": https://www.youtube.com/watch?v=AsNTP8Kwu80 — watch first, before equations; builds the right intuition
-2. StatQuest: "LSTM Clearly Explained": https://www.youtube.com/watch?v=YCzL96nL7j0 — same series, direct continuation
+1. StatQuest: "RNNs Clearly Explained": https://www.youtube.com/watch?v=AsNTP8Kwu80
+2. StatQuest: "LSTM Clearly Explained": https://www.youtube.com/watch?v=YCzL96nL7j0
 
 **Application paper**
 
@@ -485,6 +485,6 @@ print(f"Initial loss: {loss.item():.3f}  (expect ≈ {torch.log(torch.tensor(65.
 
 **The loop over time steps is the implementation.** The `forward()` method must contain an explicit `for t in range(seq_len):` loop that computes `h` at each step from `h` at the previous step. Vectorising this loop (e.g. using matrix operations over the time dimension) would bypass the recurrence and is equivalent to using a feedforward network.
 
-**Perplexity above vocabulary size means something is wrong.** The vocabulary size is ~65, so initial perplexity should be close to 65 (random predictions). If you see PPL > 65 after any training, your loss computation has a bug — most likely the logits are being reshaped incorrectly before passing to `CrossEntropyLoss`. The loss expects shape `(N, V)` for logits and `(N,)` for targets where $N = \text{batch} \times \text{seq\_len}$.
+**Perplexity above vocabulary size means something is wrong.** The vocabulary size is ~65, so initial perplexity should be close to 65 (random predictions). If you see PPL > 65 after any training, your loss computation has a bug — most likely the logits are being reshaped incorrectly before passing to `CrossEntropyLoss`. The loss expects shape `(N, V)` for logits and `(N,)` for targets, where $N = \text{batch size} \times \text{sequence length}$.
 
 **Bridge to A06:** when you look at your generated samples, notice what the LSTM still fails at — very long-range dependencies (does the character introduced 300 steps ago still exist in the story?), exact repetition of phrases, maintaining consistent verse structure. These are the failure modes that motivated attention mechanisms. Every limitation you observe here is something attention was designed to fix.
