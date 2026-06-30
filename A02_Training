@@ -1,0 +1,428 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "gpuType": "T4",
+      "authorship_tag": "ABX9TyOTEnhqmEOHCI6r/pbkTYJj",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/navyagoyal10/modern_dl_tutorial/blob/master/A02_Training\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 13,
+      "metadata": {
+        "id": "fcbwLUWDWDd2",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "c677c67f-0480-4411-b6c2-75ac01a72c33"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Cloning into 'modern_dl_tutorial'...\n",
+            "remote: Enumerating objects: 248, done.\u001b[K\n",
+            "remote: Counting objects: 100% (248/248), done.\u001b[K\n",
+            "remote: Compressing objects: 100% (200/200), done.\u001b[K\n",
+            "remote: Total 248 (delta 82), reused 193 (delta 47), pack-reused 0 (from 0)\u001b[K\n",
+            "Receiving objects: 100% (248/248), 3.24 MiB | 30.76 MiB/s, done.\n",
+            "Resolving deltas: 100% (82/82), done.\n"
+          ]
+        }
+      ],
+      "source": [
+        "!git clone https://github.com/navyagoyal10/modern_dl_tutorial.git"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%cd modern_dl_tutorial/A02"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "EZnZbS8uWaE_",
+        "outputId": "cbf6f925-4ffe-4155-c094-c4ac75701fce"
+      },
+      "execution_count": 14,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "/content/modern_dl_tutorial/A02/modern_dl_tutorial/A02\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pwd\n",
+        "!ls"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "hIafMrA-WZtc",
+        "outputId": "70105a68-323c-4d6d-a61d-43c0b283fd09"
+      },
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "/content/modern_dl_tutorial/A02/modern_dl_tutorial/A02\n",
+            "dataset.py\t  evaluate.py  README.md  utils.py\n",
+            "download_data.py  model.py     train.py\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import torch\n",
+        "\n",
+        "print(torch.cuda.is_available())\n",
+        "print(torch.cuda.get_device_name(0))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "69ExVu5uW0Wa",
+        "outputId": "dc4e7d67-5c20-452c-c892-55d0ed449b72"
+      },
+      "execution_count": 16,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "True\n",
+            "Tesla T4\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!python download_data.py"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "0xTOhxgwXcc0",
+        "outputId": "26d0df06-fa0d-4cab-c747-a9d15080696f"
+      },
+      "execution_count": 17,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "100% 94.3M/94.3M [00:01<00:00, 84.8MB/s]\n",
+            "Saved splits to data/splits.json\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!python train.py --freeze --epochs 15"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "naee6PwnXQSs",
+        "outputId": "2c172115-ce8a-49d3-9c23-c8dbd7f08515"
+      },
+      "execution_count": 20,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Epoch 1/15 | Loss: 0.9365 | Val Acc: 0.8778\n",
+            "Epoch 2/15 | Loss: 0.4623 | Val Acc: 0.8943\n",
+            "Epoch 3/15 | Loss: 0.3791 | Val Acc: 0.9062\n",
+            "Epoch 4/15 | Loss: 0.3455 | Val Acc: 0.9183\n",
+            "Epoch 5/15 | Loss: 0.3105 | Val Acc: 0.9232\n",
+            "Epoch 6/15 | Loss: 0.2968 | Val Acc: 0.9249\n",
+            "Epoch 7/15 | Loss: 0.2895 | Val Acc: 0.9264\n",
+            "Epoch 8/15 | Loss: 0.2773 | Val Acc: 0.9301\n",
+            "Epoch 9/15 | Loss: 0.2681 | Val Acc: 0.9279\n",
+            "Epoch 10/15 | Loss: 0.2566 | Val Acc: 0.9341\n",
+            "Epoch 11/15 | Loss: 0.2481 | Val Acc: 0.9267\n",
+            "Epoch 12/15 | Loss: 0.2528 | Val Acc: 0.9351\n",
+            "Epoch 13/15 | Loss: 0.2473 | Val Acc: 0.9304\n",
+            "Epoch 14/15 | Loss: 0.2394 | Val Acc: 0.9375\n",
+            "Epoch 15/15 | Loss: 0.2353 | Val Acc: 0.9343\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "from google.colab import files\n",
+        "\n",
+        "# Create the directory if it doesn't exist just in case\n",
+        "os.makedirs('./artifacts', exist_ok=True)\n",
+        "\n",
+        "# Rename the frozen model\n",
+        "if os.path.exists('./artifacts/best.pt'):\n",
+        "    os.rename('./artifacts/best.pt', './artifacts/frozen_best.pt')\n",
+        "    print(\"Renamed best.pt to frozen_best.pt\")\n",
+        "\n",
+        "    # Download it to your actual computer so you don't lose it!\n",
+        "    files.download('./artifacts/frozen_best.pt')\n",
+        "else:\n",
+        "    print(\"Wait, best.pt not found. Check your folder paths!\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "IEWCkkjQmQFH",
+        "outputId": "461aa817-4b81-4fee-d1b7-c21ca3ae5b11"
+      },
+      "execution_count": 21,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Renamed best.pt to frozen_best.pt\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "\n",
+              "    async function download(id, filename, size) {\n",
+              "      if (!google.colab.kernel.accessAllowed) {\n",
+              "        return;\n",
+              "      }\n",
+              "      const div = document.createElement('div');\n",
+              "      const label = document.createElement('label');\n",
+              "      label.textContent = `Downloading \"${filename}\": `;\n",
+              "      div.appendChild(label);\n",
+              "      const progress = document.createElement('progress');\n",
+              "      progress.max = size;\n",
+              "      div.appendChild(progress);\n",
+              "      document.body.appendChild(div);\n",
+              "\n",
+              "      const buffers = [];\n",
+              "      let downloaded = 0;\n",
+              "\n",
+              "      const channel = await google.colab.kernel.comms.open(id);\n",
+              "      // Send a message to notify the kernel that we're ready.\n",
+              "      channel.send({})\n",
+              "\n",
+              "      for await (const message of channel.messages) {\n",
+              "        // Send a message to notify the kernel that we're ready.\n",
+              "        channel.send({})\n",
+              "        if (message.buffers) {\n",
+              "          for (const buffer of message.buffers) {\n",
+              "            buffers.push(buffer);\n",
+              "            downloaded += buffer.byteLength;\n",
+              "            progress.value = downloaded;\n",
+              "          }\n",
+              "        }\n",
+              "      }\n",
+              "      const blob = new Blob(buffers, {type: 'application/binary'});\n",
+              "      const a = document.createElement('a');\n",
+              "      a.href = window.URL.createObjectURL(blob);\n",
+              "      a.download = filename;\n",
+              "      div.appendChild(a);\n",
+              "      a.click();\n",
+              "      div.remove();\n",
+              "    }\n",
+              "  "
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "download(\"download_6321b7cf-198a-43e5-8533-19473883bde5\", \"frozen_best.pt\", 44843757)"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!python train.py --epochs 15 --lr 1e-4"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "xcN9W9jsaPMQ",
+        "outputId": "b694be2b-7d87-4d68-ae18-8aa367a45e98"
+      },
+      "execution_count": 22,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Epoch 1/15 | Loss: 0.2210 | Val Acc: 0.9709\n",
+            "Epoch 2/15 | Loss: 0.0980 | Val Acc: 0.9736\n",
+            "Epoch 3/15 | Loss: 0.0685 | Val Acc: 0.9810\n",
+            "Epoch 4/15 | Loss: 0.0501 | Val Acc: 0.9805\n",
+            "Epoch 5/15 | Loss: 0.0451 | Val Acc: 0.9748\n",
+            "Epoch 6/15 | Loss: 0.0402 | Val Acc: 0.9810\n",
+            "Epoch 7/15 | Loss: 0.0336 | Val Acc: 0.9768\n",
+            "Epoch 8/15 | Loss: 0.0322 | Val Acc: 0.9768\n",
+            "Epoch 9/15 | Loss: 0.0271 | Val Acc: 0.9743\n",
+            "Epoch 10/15 | Loss: 0.0288 | Val Acc: 0.9716\n",
+            "Epoch 11/15 | Loss: 0.0218 | Val Acc: 0.9699\n",
+            "Epoch 12/15 | Loss: 0.0240 | Val Acc: 0.9719\n",
+            "Epoch 13/15 | Loss: 0.0266 | Val Acc: 0.9706\n",
+            "Epoch 14/15 | Loss: 0.0180 | Val Acc: 0.9733\n",
+            "Epoch 15/15 | Loss: 0.0175 | Val Acc: 0.9770\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "os.rename('./artifacts/best.pt', './artifacts/tuned_best.pt')\n",
+        "files.download('./artifacts/tuned_best.pt')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "id": "d3nByo0yjyLg",
+        "outputId": "e05c7878-eca5-43ac-9613-cd57c142862b"
+      },
+      "execution_count": 23,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "\n",
+              "    async function download(id, filename, size) {\n",
+              "      if (!google.colab.kernel.accessAllowed) {\n",
+              "        return;\n",
+              "      }\n",
+              "      const div = document.createElement('div');\n",
+              "      const label = document.createElement('label');\n",
+              "      label.textContent = `Downloading \"${filename}\": `;\n",
+              "      div.appendChild(label);\n",
+              "      const progress = document.createElement('progress');\n",
+              "      progress.max = size;\n",
+              "      div.appendChild(progress);\n",
+              "      document.body.appendChild(div);\n",
+              "\n",
+              "      const buffers = [];\n",
+              "      let downloaded = 0;\n",
+              "\n",
+              "      const channel = await google.colab.kernel.comms.open(id);\n",
+              "      // Send a message to notify the kernel that we're ready.\n",
+              "      channel.send({})\n",
+              "\n",
+              "      for await (const message of channel.messages) {\n",
+              "        // Send a message to notify the kernel that we're ready.\n",
+              "        channel.send({})\n",
+              "        if (message.buffers) {\n",
+              "          for (const buffer of message.buffers) {\n",
+              "            buffers.push(buffer);\n",
+              "            downloaded += buffer.byteLength;\n",
+              "            progress.value = downloaded;\n",
+              "          }\n",
+              "        }\n",
+              "      }\n",
+              "      const blob = new Blob(buffers, {type: 'application/binary'});\n",
+              "      const a = document.createElement('a');\n",
+              "      a.href = window.URL.createObjectURL(blob);\n",
+              "      a.download = filename;\n",
+              "      div.appendChild(a);\n",
+              "      a.click();\n",
+              "      div.remove();\n",
+              "    }\n",
+              "  "
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "download(\"download_7841e5fd-c3bd-4055-833c-448798778d9e\", \"tuned_best.pt\", 134298089)"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "Urw2twlyy8v5"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
